@@ -398,3 +398,182 @@ function readEditorState() {
 
 function loadSettings(settings) {
   groupRules = settings.rules || {};
+  groupOrder = Array.isArray(settings.order) && settings.order.length
+    ? settings.order
+    : Object.keys(groupRules);
+  groupOthersEnabled = Boolean(settings.groupOthersEnabled);
+  unmatchedGroupName = settings.unmatchedGroupName || '';
+  ignorePinnedTabs = Boolean(settings.ignorePinnedTabs);
+  groupOthersCheckbox.checked = groupOthersEnabled;
+  otherGroupNameInput.value = unmatchedGroupName;
+  otherGroupNameRow.style.display = groupOthersEnabled ? '' : 'none';
+  ignorePinnedCheckbox.checked = ignorePinnedTabs;
+  renderGroups(settings.colors || {});
+  updateColorPreview();
+}
+
+// ── Event listeners ──────────────────────────────────────────────────────────
+
+addGroupBtn.addEventListener('click', () => {
+  groupsContainer.appendChild(createGroupRow('', []));
+});
+
+saveBtn.addEventListener('click', () => {
+  saveCurrentRuleSet(true);
+});
+
+resetBtn.addEventListener('click', () => {
+  if (!confirm('Clear all rule sets and settings?')) return;
+  ruleSets = {};
+  activeRuleSet = 'Default';
+  groupRules = {};
+  groupOrder = [];
+  groupOthersEnabled = false;
+  unmatchedGroupName = '';
+  ignorePinnedTabs = false;
+  syncEnabled = false;
+  groupsContainer.innerHTML = '';
+  removeStoredState(() => {
+    chrome.storage.local.clear(() => {
+      if (syncEnabled && syncStorageSupported) {
+        chrome.storage.sync.clear(() => setStatus('All settings cleared.'));
+      } else {
+        setStatus('All settings cleared.');
+      }
+    });
+    ensureActiveRuleSet();
+    updateRuleSetSelect();
+    updateSyncStatus();
+    updateColorPreview();
+  });
+});
+
+groupOthersCheckbox.addEventListener('change', () => {
+  groupOthersEnabled = groupOthersCheckbox.checked;
+  otherGroupNameRow.style.display = groupOthersEnabled ? '' : 'none';
+});
+
+otherGroupNameInput.addEventListener('input', () => {
+  unmatchedGroupName = otherGroupNameInput.value.trim();
+});
+
+ignorePinnedCheckbox.addEventListener('change', () => {
+  ignorePinnedTabs = ignorePinnedCheckbox.checked;
+});
+
+syncCheckbox.addEventListener('change', () => {
+  syncEnabled = syncCheckbox.checked;
+  updateSyncStatus();
+});
+
+organizeNowBtn.addEventListener('click', () => {
+  saveCurrentRuleSet(false);
+  chrome.windows.getCurrent((win) => {
+    chrome.runtime.sendMessage({ action: 'organizeWindow', windowId: win.id }, (resp) => {
+      setStatus(resp?.ok ? 'Organized current window.' : ('Organize failed: ' + (resp?.error || '')), Boolean(resp?.ok));
+    });
+  });
+});
+
+cleanupBtn.addEventListener('click', () => {
+  chrome.windows.getCurrent((win) => {
+    chrome.runtime.sendMessage({ action: 'cleanupEmptyGroups', windowId: win.id }, (resp) => {
+      setStatus(resp?.ok ? 'Empty groups cleaned.' : ('Cleanup failed: ' + (resp?.error || '')), Boolean(resp?.ok));
+    });
+  });
+});
+
+exportBtn.addEventListener('click', () => {
+  const { rules, order, colors } = readEditorState();
+  const data = JSON.stringify({ rules, order, colors, groupOthersEnabled, unmatchedGroupName, ignorePinnedTabs }, null, 2);
+  const a = document.createElement('a');
+  a.href = 'data:application/json,' + encodeURIComponent(data);
+  a.download = 'smart-tab-organizer-settings.json';
+  a.click();
+});
+
+importBtn.addEventListener('click', () => importFile.click());
+
+importFile.addEventListener('change', () => {
+  const file = importFile.files[0];
+  if (!file) return;
+  file.text().then((text) => {
+    try {
+      const raw = JSON.parse(text);
+      const safe = sanitizeSettings(raw);
+      loadSettings(safe);
+      setStatus('Settings imported. Save to apply.');
+    } catch {
+      setStatus('Import failed: invalid JSON.', false);
+    }
+  });
+  importFile.value = '';
+});
+
+ruleSetSelect.addEventListener('change', () => {
+  if (ruleSetSelect.value === activeRuleSet) return;
+  activeRuleSet = ruleSetSelect.value;
+  ensureActiveRuleSet();
+  loadSettings(ruleSets[activeRuleSet] || {});
+  updateRuleSetSelect();
+});
+
+newRuleSetBtn.addEventListener('click', () => {
+  const name = prompt('New rule set name:');
+  if (!name?.trim()) return;
+  const safe = sanitizeString(name);
+  if (!safe || !isSafeObjectKey(safe)) { setStatus('Invalid name.', false); return; }
+  if (Object.hasOwn(ruleSets, safe)) { setStatus('Rule set already exists.', false); return; }
+  ruleSets[safe] = { rules: {}, order: [], colors: {}, groupOthersEnabled: false, unmatchedGroupName: '', ignorePinnedTabs: false };
+  activeRuleSet = safe;
+  loadSettings(ruleSets[activeRuleSet]);
+  updateRuleSetSelect();
+  setStatus('New rule set created: ' + safe);
+});
+
+deleteRuleSetBtn.addEventListener('click', () => {
+  if (Object.keys(ruleSets).length <= 1) { setStatus('Cannot delete the last rule set.', false); return; }
+  if (!confirm('Delete rule set: ' + activeRuleSet + '?')) return;
+  delete ruleSets[activeRuleSet];
+  activeRuleSet = Object.keys(ruleSets)[0];
+  loadSettings(ruleSets[activeRuleSet] || {});
+  persistState(() => setStatus('Rule set deleted.'));
+  updateRuleSetSelect();
+});
+
+groupsContainer.addEventListener('input', updateColorPreview);
+
+// ── Initialization ────────────────────────────────────────────────────────────
+
+loadStoredState((state) => {
+  syncEnabled = Boolean(state?.syncEnabled);
+  syncCheckbox.checked = syncEnabled;
+  updateSyncStatus();
+
+  if (state?.ruleSets && typeof state.ruleSets === 'object' && !Array.isArray(state.ruleSets) && Object.keys(state.ruleSets).length) {
+    ruleSets = state.ruleSets;
+    activeRuleSet = typeof state.activeRuleSet === 'string' && Object.hasOwn(ruleSets, state.activeRuleSet)
+      ? state.activeRuleSet
+      : Object.keys(ruleSets)[0];
+  } else {
+    // Migrate legacy flat settings
+    const storageArea = syncEnabled && syncStorageSupported ? chrome.storage.sync : chrome.storage.local;
+    storageArea.get(STORAGE_KEYS, (legacy) => {
+      if (legacy?.rules && Object.keys(legacy.rules).length) {
+        const safe = sanitizeSettings(legacy);
+        ruleSets['Default'] = safe;
+      } else {
+        ruleSets['Default'] = { rules: {}, order: [], colors: {}, groupOthersEnabled: false, unmatchedGroupName: '', ignorePinnedTabs: false };
+      }
+      activeRuleSet = 'Default';
+      ensureActiveRuleSet();
+      loadSettings(ruleSets[activeRuleSet]);
+      updateRuleSetSelect();
+    });
+    return;
+  }
+
+  ensureActiveRuleSet();
+  loadSettings(ruleSets[activeRuleSet] || {});
+  updateRuleSetSelect();
+});
