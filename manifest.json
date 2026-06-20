@@ -2,30 +2,29 @@
   "manifest_version": 3,
   "name": "Smart Tab Organizer",
   "version": "1.0",
-
   "description": "Automatically group tabs by hostname",
-
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "permissions": [
     "tabs",
     "tabGroups",
     "storage",
     "contextMenus"
   ],
-
   "action": {
     "default_popup": "popup.html",
     "default_title": "Smart Tab Organizer"
   },
-
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true
   },
-
   "background": {
     "service_worker": "background.js"
   },
-
   "host_permissions": [
     "<all_urls>"
   ]
