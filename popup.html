@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Tab Organizer</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #2e7d32;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #1b5e20;
+    }
+    button:active {
+      background: #0d3818;
+    }
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      text-align: center;
+      display: none;
+    }
+    .status.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      display: block;
+    }
+    .status.error {
+      background: #ffebee;
+      color: #c62828;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <button id="organizeBtn">🗂 Organize Current Window</button>
+  <div style="height:8px"></div>
+  <button id="reorderBtn">↕ Reorder Current Window</button>
+  <div style="height:8px"></div>
+  <button id="groupTabBtn">🔁 Group Current Tab</button>
+  <div style="height:8px"></div>
+  <button id="ungroupTabBtn">❌ Ungroup Current Tab</button>
+  <div class="status" id="status"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
