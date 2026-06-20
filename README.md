@@ -2,6 +2,10 @@
 
 Smart Tab Organizer groups browser tabs by hostname using user-defined rule sets.
 
+## About this repo
+
+This repository contains a lightweight Chrome extension that automatically groups related tabs by hostname, keeps workflows organized with named rule sets, and gives you quick popup controls for organizing, reordering, grouping, and ungrouping tabs.
+
 ## Features
 
 - Named rule sets for multiple workflows
@@ -14,7 +18,7 @@ Smart Tab Organizer groups browser tabs by hostname using user-defined rule sets
 
 1. Open `chrome://extensions/` (or `edge://extensions/`).
 2. Enable *Developer mode*.
-3. Click **Load unpacked** and select this repository folder.
+3. Click **Load unpacked** and select this repository folder (`tab-organizer`).
 4. Open the extension's options page via the extensions menu and configure rule sets.
 
 ## Options
