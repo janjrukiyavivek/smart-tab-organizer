@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Smart Tab Organizer — Settings</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 20px; }
+    .group-row { border: 1px solid #ddd; padding: 12px; margin-bottom: 8px; border-radius: 8px; display: grid; gap: 8px; background: #fafafa; }
+    .group-row .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .group-row label { display: block; font-size: 12px; color: #555; }
+    .group-row input, .group-row textarea, .group-row select { width: 100%; font-size: 13px; padding: 8px; border: 1px solid #ccc; border-radius: 6px; }
+    .group-row textarea { resize: vertical; min-height: 60px; }
+    .group-row .controls button { width: 32px; height: 32px; padding: 0; display: inline-flex; justify-content: center; align-items: center; }
+    .group-row .controls .small { font-size: 14px; }
+    .group-row .controls button.remove { color: #b00; }
+    .row { margin-top: 12px; display:flex; gap:8px; flex-wrap: wrap; align-items:center; }
+    .row select { flex: 1; }
+    button { padding:8px 12px; }
+    .small { padding: 6px 10px; font-size: 13px; }
+    .hint { color: #666; font-size: 12px; margin-top:8px }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12px; border: 1px solid #ccc; background: #fff; }
+    .chip .color-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #aaa; }
+    details { margin-top: 16px; }
+    details summary { cursor: pointer; font-weight: 600; }
+    .help-section { margin-top: 10px; font-size: 13px; color: #444; }
+    .status-area { margin-top: 10px; padding: 10px; border-radius: 6px; background: #f3f3f3; color: #222; font-size: 13px; }
+    .status-area.error { background: #ffe6e6; color: #900; }
+  </style>
+</head>
+<body>
+  <h3>Smart Tab Organizer — Settings</h3>
+  <div class="row">
+    <label for="ruleSetSelect">Rule set / workflow</label>
+    <select id="ruleSetSelect"></select>
+    <button id="newRuleSetBtn" class="small">New</button>
+    <button id="deleteRuleSetBtn" class="small">Delete</button>
+  </div>
+  <div id="groupsContainer"></div>
+  <div class="row">
+    <button id="addGroupBtn" class="small">+ Add Group</button>
+  </div>
+  <div class="row" id="colorPreviewRow">
+    <strong>Color preview:</strong>
+    <div id="colorPreview" class="chip-row"></div>
+  </div>
+  <div class="row">
+    <label><input id="groupOthersCheckbox" type="checkbox" /> Group unmatched tabs into a named group</label>
+  </div>
+  <div class="row" id="otherGroupNameRow" style="display:none;">
+    <input id="otherGroupNameInput" type="text" placeholder="Group name for unmatched tabs" style="width:100%;" />
+  </div>
+  <div class="row">
+    <label><input id="ignorePinnedCheckbox" type="checkbox" /> Ignore pinned tabs when organizing</label>
+  </div>
+  <div class="row">
+    <label><input id="syncCheckbox" type="checkbox" /> Sync settings across Chrome devices</label>
+  </div>
+  <div class="hint" id="syncStatus"></div>
+  <p class="hint">Add only the groups you need, then save. The order here defines the group sequence used when reordering tabs. Unmatched grouping is optional and controlled separately.</p>
+    <div class="row">
+    <button id="saveBtn">Save</button>
+    <button id="resetBtn">Clear All</button>
+  </div>
+  <div class="row">
+    <button id="organizeNowBtn">Organize Now</button>
+    <button id="cleanupBtn">Clean Empty Groups</button>
+    <button id="exportBtn">Export JSON</button>
+    <button id="importBtn" class="small">Import JSON</button>
+    <input id="importFile" type="file" accept="application/json" style="display:none;" />
+  </div>
+  <details>
+    <summary>Help & Usage</summary>
+    <div class="help-section">
+      <p><strong>Features</strong></p>
+      <ul>
+        <li>Named rule sets let you store multiple workflows.</li>
+        <li>Sync only when enabled by you.</li>
+        <li>Live group color preview and validation.</li>
+        <li>Auto-organize tabs on creation, URL changes, and new windows.</li>
+        <li>Quick popup actions for organize, reorder, clean, regroup, and ungroup.</li>
+      </ul>
+      <p><strong>Rule syntax</strong></p>
+      <ul>
+        <li><code>example.com</code> — exact hostname or subdomain match.</li>
+        <li><code>*.amazonaws.com</code> — wildcard hostname match.</li>
+        <li><code>contains:github</code> — substring match anywhere in the hostname.</li>
+        <li><code>regex:^.*\.google\.com$</code> — regex match against the hostname.</li>
+      </ul>
+      <p>Enter one rule per line. Save your rule set before switching to preserve changes.</p>
+    </div>
+  </details>
+  <details>
+    <summary>Release notes</summary>
+    <div class="help-section">
+      <ul>
+        <li>Added named rule sets for workflows and profile-style layouts.</li>
+        <li>Sync is now opt-in and clearly visible.</li>
+        <li>Popup supports live status, cleanup, ungroup, and regroup actions.</li>
+        <li>Options now include help, release notes, and contact info.</li>
+      </ul>
+    </div>
+  </details>
+  <div id="status" class="hint"></div>
+  <div class="hint" style="margin-top:16px; font-weight:600;">Maintained by Vivek Janjrukiya </div>
+  <script src="options.js"></script>
+</body>
+</html>
