@@ -7,12 +7,14 @@ Smart Tab Organizer is a Chrome extension that helps users organize tabs by grou
 ## What data is accessed
 
 The extension may access:
+
 - Tab URL and hostname information (using Chrome tab permissions) to determine how tabs should be grouped.
 - User configuration data saved by the extension, such as rules, group order, colors, and preferences.
 
 ## How data is used
 
 Data is used only to provide the extension's core functionality:
+
 - Matching open tabs to user-defined grouping rules.
 - Creating and managing tab groups.
 - Saving and restoring user preferences.
