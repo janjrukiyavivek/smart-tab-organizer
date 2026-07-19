@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Tab Organizer — Chrome Extension</title>
+<meta name="description" content="Smart Tab Organizer groups browser tabs by hostname using user-defined rule sets. Lightweight, local-only, no data collection.">
+<style>
+  :root{
+    --bg:#0b1220;
+    --bg-alt:#0d1526;
+    --panel:#111827;
+    --ink:#f8fafc;
+    --ink-soft:#94a3b8;
+    --ink-soft2:#cbd5e1;
+    --rule:rgba(255,255,255,0.08);
+    --accent:#38bdf8;
+    --btn:#0066cc;
+    --btn-hover:#0077ee;
+    --sans:'Inter','Segoe UI',sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px; line-height:1.6;
+  }
+  a{ color:var(--accent); }
+  code{ font-family:var(--mono); background:var(--panel); padding:2px 6px; border-radius:4px; border:1px solid var(--rule); font-size:0.9em; }
+
+  .container{ width:90%; max-width:1000px; margin:0 auto; }
+
+  nav{
+    position:sticky; top:0; z-index:20;
+    background:rgba(11,18,32,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--rule);
+    padding:18px 0;
+  }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; }
+  .brand{ font-weight:700; font-size:15px; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px; }
+  .brand .dot{ color:var(--accent); }
+  .nav-links{ display:flex; gap:20px; align-items:center; font-size:13.5px; }
+  .nav-links a{ color:var(--ink-soft2); text-decoration:none; transition:color 140ms ease; }
+  .nav-links a:hover{ color:var(--accent); }
+  .nav-links .cta{
+    background:var(--btn); color:#fff; padding:8px 16px; border-radius:8px;
+    font-weight:600; text-decoration:none; transition:background 140ms ease, transform 140ms ease;
+  }
+  .nav-links .cta:hover{ background:var(--btn-hover); transform:translateY(-1px); }
+
+  .hero{ padding:72px 0 48px; }
+  .eyebrow{
+    color:var(--accent); font-size:0.85rem; text-transform:uppercase;
+    letter-spacing:0.14em; font-weight:700; margin-bottom:14px;
+  }
+  h1{ font-size:clamp(2rem,5vw,3rem); font-weight:700; margin:0 0 16px; line-height:1.15; }
+  .tagline{ font-size:1.1rem; color:var(--ink-soft2); max-width:60ch; margin:0 0 32px; }
+  .buttons{ display:flex; gap:12px; flex-wrap:wrap; }
+  .btn-primary, .btn-secondary{
+    display:inline-block; padding:12px 24px; border-radius:8px; text-decoration:none;
+    font-weight:600; font-size:0.95rem; transition:transform 140ms ease, opacity 140ms ease, background 140ms ease;
+  }
+  .btn-primary{ background:var(--btn); color:#fff; }
+  .btn-primary:hover{ background:var(--btn-hover); transform:translateY(-1px); }
+  .btn-secondary{ border:1px solid var(--btn); color:var(--ink); }
+  .btn-secondary:hover{ background:rgba(0,102,204,0.15); transform:translateY(-1px); }
+
+  section{ padding:56px 0; border-top:1px solid var(--rule); scroll-margin-top:76px; }
+  section h2{
+    font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; font-weight:700;
+    color:var(--accent); margin:0 0 24px;
+    display:flex; align-items:center; gap:12px;
+  }
+  section h2::after{ content:""; flex:1; height:1px; background:var(--rule); }
+  section p{ color:var(--ink-soft2); max-width:70ch; margin:0 0 14px; }
+
+  .shots{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
+  .shot{ background:var(--panel); border:1px solid var(--rule); border-radius:12px; overflow:hidden; }
+  .shot img{ width:100%; display:block; }
+  .shot .cap{ padding:14px 16px; font-size:13px; color:var(--ink-soft); border-top:1px solid var(--rule); }
+
+  .cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:20px; }
+  .card{ background:var(--panel); padding:22px; border-radius:12px; border:1px solid var(--rule); transition:border-color 180ms ease; }
+  .card:hover{ border-color:rgba(56,189,248,0.35); }
+  .card h3{ margin:0 0 8px; font-size:1rem; color:var(--ink); }
+  .card p{ color:var(--ink-soft); font-size:0.92rem; margin:0; }
+
+  ol.steps{ margin:0; padding-left:22px; display:flex; flex-direction:column; gap:10px; color:var(--ink-soft2); }
+  ol.steps li{ max-width:70ch; }
+
+  .rule-syntax{ display:flex; flex-direction:column; gap:12px; margin-top:16px; }
+  .rule-syntax div{ background:var(--panel); border:1px solid var(--rule); border-radius:8px; padding:12px 16px; }
+  .rule-syntax code{ background:none; border:none; padding:0; color:var(--accent); }
+
+  .privacy-box{
+    background:var(--panel); border:1px solid var(--rule); border-radius:12px; padding:24px 28px;
+  }
+  .privacy-box ul{ margin:12px 0 0; padding-left:20px; color:var(--ink-soft2); }
+  .privacy-box li{ margin-bottom:8px; max-width:70ch; }
+
+  .release{ border-left:2px solid var(--rule); padding-left:20px; margin-bottom:24px; }
+  .release .ver{ font-weight:700; font-size:15px; color:var(--ink); margin:0 0 8px; }
+  .release ul{ margin:0; padding-left:18px; color:var(--ink-soft); font-size:13.5px; }
+  .release li{ margin-bottom:4px; }
+
+  footer{
+    border-top:1px solid var(--rule); padding:32px 0;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-size:13px; color:var(--ink-soft);
+  }
+  footer a{ color:var(--ink-soft); }
+
+  @media (max-width:640px){
+    .nav-links{ gap:12px; font-size:12.5px; }
+    section{ padding:40px 0; }
+    footer{ flex-direction:column; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a class="brand" href="#top"><span class="dot">▍</span>Smart Tab Organizer</a>
+    <div class="nav-links">
+      <a href="#screenshots">Screenshots</a>
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="#privacy">Privacy</a>
+      <a class="cta" href="https://github.com/janjrukiyavivek/smart-tab-organizer" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="container">
+    <p class="eyebrow">Chrome / Edge Extension</p>
+    <h1>Smart Tab Organizer</h1>
+    <p class="tagline">Groups browser tabs by hostname using user-defined rule sets — named workflows, live color preview, and quick popup controls for organizing, reordering, grouping, and ungrouping tabs.</p>
+    <div class="buttons">
+      <a href="#install" class="btn-primary">Install guide</a>
+      <a href="https://github.com/janjrukiyavivek/smart-tab-organizer" target="_blank" rel="noopener" class="btn-secondary">Source on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section id="screenshots">
+  <div class="container">
+    <h2>Screenshots</h2>
+    <div class="shots">
+      <div class="shot">
+        <img src="https://raw.githubusercontent.com/janjrukiyavivek/smart-tab-organizer/main/ScreenShot1.png" alt="Smart Tab Organizer popup with Organize, Reorder, Group, and Ungroup actions">
+        <div class="cap">Popup — one-click organize, reorder, group, and ungroup for the current window/tab.</div>
+      </div>
+      <div class="shot">
+        <img src="https://raw.githubusercontent.com/janjrukiyavivek/smart-tab-organizer/main/ScreenShot2.png" alt="Smart Tab Organizer options page with rule sets and settings">
+        <div class="cap">Options page — named rule sets, group ordering, and sync/ignore-pinned preferences.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <h2>Features</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Named rule sets</h3>
+        <p>Maintain multiple workflows and switch between them from the options page.</p>
+      </div>
+      <div class="card">
+        <h3>Sync across devices</h3>
+        <p>Opt-in sync of settings via Chrome storage, disabled by default.</p>
+      </div>
+      <div class="card">
+        <h3>Live color preview</h3>
+        <p>See group colors and ordering before saving your rule set.</p>
+      </div>
+      <div class="card">
+        <h3>Popup actions</h3>
+        <p>Organize, reorder, group, ungroup, and clean up empty groups in one click.</p>
+      </div>
+      <div class="card">
+        <h3>Unmatched fallback</h3>
+        <p>Optionally collect unmatched tabs into their own named group.</p>
+      </div>
+      <div class="card">
+        <h3>Ignore pinned tabs</h3>
+        <p>Keep pinned tabs out of automatic grouping entirely.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="container">
+    <h2>Install (load unpacked)</h2>
+    <ol class="steps">
+      <li>Open <code>chrome://extensions/</code> (or <code>edge://extensions/</code>).</li>
+      <li>Enable <b>Developer mode</b>.</li>
+      <li>Click <b>Load unpacked</b> and select the cloned repository folder.</li>
+      <li>Open the extension's options page via the extensions menu and configure your rule sets.</li>
+    </ol>
+
+    <h2 style="margin-top:40px;">Rule syntax</h2>
+    <p>Add one rule per line inside a group. Supported formats:</p>
+    <div class="rule-syntax">
+      <div><code>contains:github</code> — matches any hostname containing "github"</div>
+      <div><code>*.google.com</code> — wildcard subdomain match</div>
+      <div><code>regex:^mail\.</code> — full regex matching for advanced cases</div>
+    </div>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="container">
+    <h2>Privacy</h2>
+    <div class="privacy-box">
+      <p style="margin:0;">Smart Tab Organizer only accesses tab URLs/hostnames and your own saved rule configuration — nothing leaves your browser.</p>
+      <ul>
+        <li>No data is sold, shared with third parties, or used for advertising/profiling.</li>
+        <li>Settings are stored in <code>chrome.storage.local</code> (and optionally <code>chrome.storage.sync</code> if you opt in) — processing happens entirely in the browser.</li>
+        <li>No developer-controlled server, and no remote code is used for core functionality.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="changelog">
+  <div class="container">
+    <h2>Release notes</h2>
+    <div class="release">
+      <p class="ver">1.0.0 — 2026-06-19</p>
+      <ul>
+        <li>Initial public release.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>MIT Licensed · <a href="https://github.com/janjrukiyavivek/smart-tab-organizer" target="_blank" rel="noopener">github.com/janjrukiyavivek/smart-tab-organizer</a></span>
+    <span>Built by <a href="https://bytebox.network" target="_blank" rel="noopener">Vivek Janjrukiya</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
