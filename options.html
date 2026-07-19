@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Smart Tab Organizer — Settings</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 20px; }
@@ -26,6 +27,9 @@
     .help-section { margin-top: 10px; font-size: 13px; color: #444; }
     .status-area { margin-top: 10px; padding: 10px; border-radius: 6px; background: #f3f3f3; color: #222; font-size: 13px; }
     .status-area.error { background: #ffe6e6; color: #900; }
+    .hidden { display: none; }
+    .full-width { width: 100%; }
+    .footer-note { margin-top: 16px; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -47,8 +51,8 @@
   <div class="row">
     <label><input id="groupOthersCheckbox" type="checkbox" /> Group unmatched tabs into a named group</label>
   </div>
-  <div class="row" id="otherGroupNameRow" style="display:none;">
-    <input id="otherGroupNameInput" type="text" placeholder="Group name for unmatched tabs" style="width:100%;" />
+  <div class="row hidden" id="otherGroupNameRow">
+    <input id="otherGroupNameInput" type="text" placeholder="Group name for unmatched tabs" class="full-width" />
   </div>
   <div class="row">
     <label><input id="ignorePinnedCheckbox" type="checkbox" /> Ignore pinned tabs when organizing</label>
@@ -67,7 +71,7 @@
     <button id="cleanupBtn">Clean Empty Groups</button>
     <button id="exportBtn">Export JSON</button>
     <button id="importBtn" class="small">Import JSON</button>
-    <input id="importFile" type="file" accept="application/json" style="display:none;" />
+    <input id="importFile" type="file" accept="application/json" class="hidden" />
   </div>
   <details>
     <summary>Help & Usage</summary>
@@ -102,7 +106,7 @@
     </div>
   </details>
   <div id="status" class="hint"></div>
-  <div class="hint" style="margin-top:16px; font-weight:600;">Maintained by Vivek Janjrukiya </div>
+  <div class="hint footer-note">Maintained by Vivek Janjrukiya </div>
   <script src="options.js"></script>
 </body>
 </html>

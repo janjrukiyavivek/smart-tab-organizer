@@ -238,8 +238,14 @@ function updateColorPreview() {
 }
 
 function saveCurrentRuleSet(showStatus = true) {
-  const { rules, order, colors } = readEditorState();
-  let finalOrder = order.slice();
+  const { rules: rawRules, order: rawOrder, colors: rawColors } = readEditorState();
+  const rules = sanitizeRules(rawRules);
+  const groupNames = Object.keys(rules);
+  const colors = {};
+  groupNames.forEach((name) => {
+    colors[name] = normalizeGroupColor(rawColors[name], 'grey');
+  });
+  let finalOrder = sanitizeOrder(rawOrder, groupNames);
   if (groupOthersEnabled && unmatchedGroupName) {
     if (!finalOrder.includes(unmatchedGroupName)) finalOrder.push(unmatchedGroupName);
   }
@@ -406,7 +412,7 @@ function loadSettings(settings) {
   ignorePinnedTabs = Boolean(settings.ignorePinnedTabs);
   groupOthersCheckbox.checked = groupOthersEnabled;
   otherGroupNameInput.value = unmatchedGroupName;
-  otherGroupNameRow.style.display = groupOthersEnabled ? '' : 'none';
+  otherGroupNameRow.classList.toggle('hidden', !groupOthersEnabled);
   ignorePinnedCheckbox.checked = ignorePinnedTabs;
   renderGroups(settings.colors || {});
   updateColorPreview();
@@ -450,7 +456,7 @@ resetBtn.addEventListener('click', () => {
 
 groupOthersCheckbox.addEventListener('change', () => {
   groupOthersEnabled = groupOthersCheckbox.checked;
-  otherGroupNameRow.style.display = groupOthersEnabled ? '' : 'none';
+  otherGroupNameRow.classList.toggle('hidden', !groupOthersEnabled);
 });
 
 otherGroupNameInput.addEventListener('input', () => {

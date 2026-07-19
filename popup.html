@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Smart Tab Organizer</title>
   <style>
     body {
@@ -46,15 +47,18 @@
       color: #c62828;
       display: block;
     }
+    .spacer {
+      height: 8px;
+    }
   </style>
 </head>
 <body>
   <button id="organizeBtn">🗂 Organize Current Window</button>
-  <div style="height:8px"></div>
+  <div class="spacer"></div>
   <button id="reorderBtn">↕ Reorder Current Window</button>
-  <div style="height:8px"></div>
+  <div class="spacer"></div>
   <button id="groupTabBtn">🔁 Group Current Tab</button>
-  <div style="height:8px"></div>
+  <div class="spacer"></div>
   <button id="ungroupTabBtn">❌ Ungroup Current Tab</button>
   <div class="status" id="status"></div>
   <script src="popup.js"></script>
