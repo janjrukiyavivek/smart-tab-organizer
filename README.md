@@ -42,7 +42,7 @@ Open the options page to create named rule sets, add groups (one group per row),
 
 ## Author & Contact
 
-Maintained by Vivek Janrukiya
+Maintained by Vivek Janjrukiya
 
 ## License
 
