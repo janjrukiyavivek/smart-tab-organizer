@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smart Tab Organizer — Chrome Extension</title>
 <meta name="description" content="Smart Tab Organizer groups browser tabs by hostname using user-defined rule sets. Lightweight, local-only, no data collection.">
+<link rel="icon" type="image/svg+xml" href="https://bytebox.network/assets/bb-logo.svg">
 <style>
   :root{
     --bg:#0b1220;
@@ -46,10 +47,10 @@
   .topbar .brand{
     font-weight:700; font-size:15px;
     color:var(--ink); letter-spacing:0.02em;
-    display:flex; align-items:center; gap:8px;
+    display:flex; align-items:center; gap:10px;
     text-decoration:none;
   }
-  .topbar .brand .dot{ color:var(--accent); }
+  .topbar .brand .logo-mark{ height:28px; width:auto; display:block; }
   .topbar .links{ display:flex; gap:20px; align-items:center; font-size:13.5px; }
   .topbar .links a{ color:var(--ink-soft2); text-decoration:none; transition:color 140ms ease; }
   .topbar .links a:hover{ color:var(--accent); }
@@ -166,7 +167,7 @@
 <body>
 
 <div class="topbar">
-  <a class="brand" href="#overview"><span class="dot">▍</span>Smart Tab Organizer</a>
+  <a class="brand" href="#overview"><img src="https://bytebox.network/assets/vj-bb-logo.svg" alt="VJ / ByteBox" class="logo-mark">Smart Tab Organizer</a>
   <div class="links">
     <a href="https://bytebox.network">Home</a>
     <a href="#screenshots">Screenshots</a>
