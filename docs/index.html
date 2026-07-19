@@ -38,8 +38,8 @@
   .topbar{
     position:sticky; top:0; z-index:20;
     background:rgba(11,18,32,0.92);
-    backdrop-filter:blur(6px);
     -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
     border-bottom:1px solid var(--rule);
     display:flex; align-items:center; justify-content:space-between;
     padding:18px 24px;
@@ -89,6 +89,9 @@
   section h3{ font-size:16px; font-weight:700; margin:24px 0 8px; color:var(--ink); }
   section p{ max-width:70ch; color:var(--ink-soft2); margin:0 0 14px; }
   section p.soft{ color:var(--ink-soft); }
+  .mt-note{ margin-top:14px; }
+  .text-sm{ font-size:13.5px; }
+  ul.clean li b, ol.steps li b{ color:var(--ink); }
 
   /* ===== HERO ===== */
   .hero{ padding:8px 0 8px; }
@@ -208,18 +211,18 @@
         </div>
         <img src="https://raw.githubusercontent.com/janjrukiyavivek/smart-tab-organizer/main/ScreenShot1.png" alt="Smart Tab Organizer popup with Organize, Reorder, Group, and Ungroup actions">
       </div>
-      <p class="soft" style="margin-top:14px; font-size:13.5px;">One click each for Organize, Reorder, Group, and Ungroup — scoped to the current window or tab.</p>
+      <p class="soft mt-note text-sm">One click each for Organize, Reorder, Group, and Ungroup — scoped to the current window or tab.</p>
     </section>
 
     <section id="features">
       <h2>Features</h2>
       <ul class="clean">
-        <li><b style="color:var(--ink)">Named rule sets</b> — maintain multiple workflows and switch between them from the options page.</li>
-        <li><b style="color:var(--ink)">Sync across devices</b> — opt-in sync of settings via Chrome storage, disabled by default.</li>
-        <li><b style="color:var(--ink)">Live color preview</b> — see group colors and ordering before saving your rule set.</li>
-        <li><b style="color:var(--ink)">Popup actions</b> — organize, reorder, group, ungroup, and clean up empty groups in one click.</li>
-        <li><b style="color:var(--ink)">Unmatched fallback</b> — optionally collect unmatched tabs into their own named group.</li>
-        <li><b style="color:var(--ink)">Ignore pinned tabs</b> — keep pinned tabs out of automatic grouping entirely.</li>
+        <li><b>Named rule sets</b> — maintain multiple workflows and switch between them from the options page.</li>
+        <li><b>Sync across devices</b> — opt-in sync of settings via Chrome storage, disabled by default.</li>
+        <li><b>Live color preview</b> — see group colors and ordering before saving your rule set.</li>
+        <li><b>Popup actions</b> — organize, reorder, group, ungroup, and clean up empty groups in one click.</li>
+        <li><b>Unmatched fallback</b> — optionally collect unmatched tabs into their own named group.</li>
+        <li><b>Ignore pinned tabs</b> — keep pinned tabs out of automatic grouping entirely.</li>
       </ul>
     </section>
 
@@ -255,8 +258,8 @@
       <h3>Or load unpacked (for development/testing)</h3>
       <ol class="steps">
         <li>Open <code>chrome://extensions/</code> (or <code>edge://extensions/</code>).</li>
-        <li>Enable <b style="color:var(--ink)">Developer mode</b>.</li>
-        <li>Click <b style="color:var(--ink)">Load unpacked</b> and select the cloned repository folder.</li>
+        <li>Enable <b>Developer mode</b>.</li>
+        <li>Click <b>Load unpacked</b> and select the cloned repository folder.</li>
         <li>Open the extension's options page via the extensions menu and configure your rule sets.</li>
       </ol>
     </section>
