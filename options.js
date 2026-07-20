@@ -29,7 +29,7 @@ let activeRuleSet = 'Default';
 let syncEnabled = false;
 let syncStorageSupported = Boolean(chrome.storage?.sync);
 const STATE_KEYS = ['ruleSets', 'activeRuleSet', 'syncEnabled'];
-const ALLOWED_GROUP_COLORS = ['grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'];
+const ALLOWED_GROUP_COLORS = new Set(['grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange']);
 const FORBIDDEN_OBJECT_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
 const MAX_GROUPS = 100;
 const MAX_RULES_PER_GROUP = 200;
@@ -39,7 +39,7 @@ const MAX_STRING_LENGTH = 256;
 const STORAGE_KEYS = ['rules', 'order', 'colors', 'groupOthersEnabled', 'unmatchedGroupName', 'ignorePinnedTabs'];
 
 function normalizeGroupColor(color, fallback = 'grey') {
-  return ALLOWED_GROUP_COLORS.includes(color) ? color : fallback;
+  return ALLOWED_GROUP_COLORS.has(color) ? color : fallback;
 }
 
 function normalizeColorsMap(colors) {
