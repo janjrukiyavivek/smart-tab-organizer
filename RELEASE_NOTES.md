@@ -2,8 +2,6 @@
 
 Use this file to record user-visible changes for each release.
 
-## Unreleased
-
 ## 1.1.0 - 2026-07-20
 
 - Fix: `contains:` and `regex:` rule prefixes were documented in the Help text
