@@ -13,6 +13,7 @@ This repository contains a lightweight Chrome extension that automatically group
 ## Features
 
 - Named rule sets for multiple workflows
+- Flexible rule matching: exact/subdomain, wildcard, substring (`contains:`), regex, and path-based (`hostname/path`)
 - Sync settings across devices (opt-in)
 - Live color preview and ordered groups
 - Popup actions: organize, reorder, group, ungroup, cleanup
