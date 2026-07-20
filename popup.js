@@ -19,8 +19,8 @@ document.getElementById('organizeBtn').addEventListener('click', async () => {
       }
 
       try {
-        const hostname = new URL(tab.url).hostname;
-        const group = await getGroupForHostname(hostname);
+        const { hostname, pathname } = new URL(tab.url);
+        const group = await getGroupForUrl(hostname, pathname);
         const groupTitle = group || (groupOthersEnabled && unmatchedGroupName ? unmatchedGroupName : null);
 
         if (!groupTitle) {
@@ -154,16 +154,9 @@ function getRuleSource() {
   });
 }
 
-async function getGroupForHostname(hostname) {
+async function getGroupForUrl(hostname, pathname) {
   const RULES = await getRuleSource();
-  for (const [group, domains] of Object.entries(RULES)) {
-    for (const domain of domains) {
-      if (hostname === domain || hostname.endsWith("." + domain)) {
-        return group;
-      }
-    }
-  }
-  return null;
+  return findGroupForUrl(RULES, hostname, pathname);
 }
 
 async function organizeTab(tabId, groupTitle) {

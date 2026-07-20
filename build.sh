@@ -14,6 +14,7 @@ rm -f "$DIST"
 zip "$DIST" \
   manifest.json \
   background.js \
+  rules.js \
   popup.html \
   popup.js \
   options.html \

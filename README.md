@@ -31,14 +31,17 @@ This repository contains a lightweight Chrome extension that automatically group
 
 ## Options
 
-Open the options page to create named rule sets, add groups (one group per row), and enter rules (one per line). Use `contains:`, `*.domain` wildcards, or `regex:` prefixes for advanced matching.
+Open the options page to create named rule sets, add groups (one group per row), and enter rules (one per line). Use `contains:`, `*.domain` wildcards, `regex:` prefixes, or `hostname/path` (e.g. `example.com/jira` vs `example.com/wiki`) for advanced matching.
 
 ## Developer notes
 
 - Manifest: `manifest.json` (MV3)
 - Background service worker: `background.js`
+- Shared rule-matching engine: `rules.js`
 - Options UI: `options.html`, `options.js`
 - Popup: `popup.html`, `popup.js`
+
+See `PLUGIN.md` for architecture details, the full rule syntax reference, and the build/release process.
 
 ## Author & Contact
 

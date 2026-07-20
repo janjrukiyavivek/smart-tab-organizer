@@ -28,6 +28,14 @@
     .status-area { margin-top: 10px; padding: 10px; border-radius: 6px; background: #f3f3f3; color: #222; font-size: 13px; }
     .status-area.error { background: #ffe6e6; color: #900; }
     .hidden { display: none; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
     .full-width { width: 100%; }
     .footer-note { margin-top: 16px; font-weight: 600; }
   </style>
@@ -52,6 +60,7 @@
     <label><input id="groupOthersCheckbox" type="checkbox" /> Group unmatched tabs into a named group</label>
   </div>
   <div class="row hidden" id="otherGroupNameRow">
+    <label class="sr-only" for="otherGroupNameInput">Group name for unmatched tabs</label>
     <input id="otherGroupNameInput" type="text" placeholder="Group name for unmatched tabs" class="full-width" />
   </div>
   <div class="row">
@@ -71,6 +80,7 @@
     <button id="cleanupBtn">Clean Empty Groups</button>
     <button id="exportBtn">Export JSON</button>
     <button id="importBtn" class="small">Import JSON</button>
+    <label class="sr-only" for="importFile">Import settings JSON file</label>
     <input id="importFile" type="file" accept="application/json" class="hidden" />
   </div>
   <details>
@@ -88,6 +98,7 @@
       <ul>
         <li><code>example.com</code> — exact hostname or subdomain match.</li>
         <li><code>*.amazonaws.com</code> — wildcard hostname match.</li>
+        <li><code>example.com/path</code> — match a specific path on a hostname, e.g. <code>example.com/jira</code> vs <code>example.com/wiki</code> as separate groups.</li>
         <li><code>contains:github</code> — substring match anywhere in the hostname.</li>
         <li><code>regex:^.*\.google\.com$</code> — regex match against the hostname.</li>
       </ul>

@@ -1,3 +1,5 @@
+importScripts('rules.js');
+
 // runtime RULES, order, unmatched-group settings, and colors can be overridden from chrome.storage via Options UI
 let RULES = {};
 let ORDER = [];
@@ -91,21 +93,6 @@ chrome.storage?.onChanged?.addListener((changes, area) => {
     if (updateMap[key]) updateMap[key](change.newValue);
   });
 });
-
-function getGroup(hostname) {
-  for (const [group, domains] of Object.entries(RULES)) {
-    for (const domain of domains) {
-      if (!domain) continue;
-      if (domain.startsWith('*.' )) {
-        const base = domain.slice(2);
-        if (hostname === base || hostname.endsWith('.' + base)) return group;
-      } else if (hostname === domain || hostname.endsWith('.' + domain)) {
-        return group;
-      }
-    }
-  }
-  return null;
-}
 
 async function moveToGroup(tabId, groupTitle) {
   if (!groupTitle || typeof groupTitle !== 'string') return;
@@ -256,8 +243,8 @@ async function processTab(tabId, url) {
     if (!url) return;
     const tab = await chrome.tabs.get(tabId);
     if (ignorePinnedTabs && tab.pinned) return;
-    const hostname = new URL(url).hostname;
-    let group = getGroup(hostname);
+    const { hostname, pathname } = new URL(url);
+    let group = findGroupForUrl(RULES, hostname, pathname);
     if (!group && groupOthersEnabled && unmatchedGroupName) {
       group = unmatchedGroupName;
     }
