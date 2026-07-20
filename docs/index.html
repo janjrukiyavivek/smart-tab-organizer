@@ -320,6 +320,14 @@
     <section id="changelog">
       <h2>Release notes</h2>
       <div class="release">
+        <p class="ver">1.1.0 — 2026-07-20</p>
+        <ul>
+          <li>Fixed <code>contains:</code> and <code>regex:</code> rule matching, which were documented but previously had no effect.</li>
+          <li>Added new <code>hostname/path</code> rule syntax to group tabs by path, not just hostname (e.g. <code>example.com/jira</code> vs <code>example.com/wiki</code>).</li>
+          <li>Hardened rule-set validation so manually saved settings are checked the same way as imported ones.</li>
+        </ul>
+      </div>
+      <div class="release">
         <p class="ver">1.0.0 — 2026-06-19</p>
         <ul>
           <li>Initial public release.</li>
