@@ -2,6 +2,12 @@
 
 Use this file to record user-visible changes for each release.
 
+## Unreleased
+
+- Docs: added a `security.txt` (RFC 9116) to the documentation site at
+  `/.well-known/security.txt`, and a `SECURITY.md` for GitHub's vulnerability
+  reporting UI.
+
 ## 1.1.0 - 2026-07-20
 
 - Fix: `contains:` and `regex:` rule prefixes were documented in the Help text

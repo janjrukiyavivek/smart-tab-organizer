@@ -1,6 +1,6 @@
 # Privacy Policy for Smart Tab Organizer
 
-Effective date: 2026-06-20
+Effective date: 2026-07-25
 
 Smart Tab Organizer is a Chrome extension that helps users organize tabs by grouping them based on user-defined hostname rules.
 
@@ -8,7 +8,7 @@ Smart Tab Organizer is a Chrome extension that helps users organize tabs by grou
 
 The extension may access:
 
-- Tab URL and hostname information (using Chrome tab permissions) to determine how tabs should be grouped.
+- Tab URL information (using Chrome tab permissions) to determine how tabs should be grouped, including the hostname and, for path-based rules, the URL path.
 - User configuration data saved by the extension, such as rules, group order, colors, and preferences.
 
 ## How data is used
@@ -37,4 +37,4 @@ The extension does not use remote code for core functionality.
 
 ## Contact
 
-For support or questions, use the publisher contact listed on the Chrome Web Store item page.
+For support or questions, use the publisher contact listed on the Chrome Web Store item page. To report a security vulnerability, see `SECURITY.md`.

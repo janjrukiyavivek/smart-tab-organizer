@@ -56,6 +56,10 @@ This project is available under the terms of the MIT license — see `LICENSE`.
 
 See `CONTRIBUTING.md` for contribution guidelines and local testing steps.
 
+## Security
+
+See `SECURITY.md` to report a vulnerability privately.
+
 ## Release notes
 
 See `RELEASE_NOTES.md` for user-visible changelog and release history.

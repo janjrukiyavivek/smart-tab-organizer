@@ -6,12 +6,14 @@ Thanks for your interest in contributing to Smart Tab Organizer! Small, focused 
 
 - Open an issue describing the bug or feature request.
 - Include steps to reproduce, your browser (Chrome/Edge) and version, and any relevant console errors.
+- For security vulnerabilities, don't open a public issue — see `SECURITY.md` instead.
 
 ## Development workflow
 
 - Fork the repository and create a branch: `feature/my-feature` or `fix/issue-123`.
 - Make changes and test locally by loading the extension as an unpacked extension (see README).
 - Create a pull request with a concise description of the change.
+- See `PLUGIN.md` for the extension's architecture (including the shared rule-matching engine in `rules.js`), the rule syntax reference, and the build/release process — read it before changing matching logic or the packaging step.
 
 ## Code style
 
