@@ -224,7 +224,7 @@
       <div class="group-label">Trust</div>
       <a href="#privacy">Privacy</a>
       <div class="group-label">History</div>
-      <a href="#changelog">Release notes</a>
+      <a href="#changelog">What's new</a>
     </nav>
   </aside>
 
@@ -319,13 +319,12 @@
     </section>
 
     <section id="changelog">
-      <h2>Release notes</h2>
+      <h2>What's new</h2>
       <div class="release">
         <p class="ver">1.1.0 — 2026-07-20</p>
         <ul>
-          <li>Fixed <code>contains:</code> and <code>regex:</code> rule matching, which were documented but previously had no effect.</li>
-          <li>Added new <code>hostname/path</code> rule syntax to group tabs by path, not just hostname (e.g. <code>example.com/jira</code> vs <code>example.com/wiki</code>).</li>
-          <li>Hardened rule-set validation so manually saved settings are checked the same way as imported ones.</li>
+          <li>Group tabs by page path, not just domain — e.g. keep <code>example.com/jira</code> and <code>example.com/wiki</code> in separate groups on the same site.</li>
+          <li>Substring and regex-based grouping rules are more reliable.</li>
         </ul>
       </div>
       <div class="release">
@@ -334,6 +333,7 @@
           <li>Initial public release.</li>
         </ul>
       </div>
+      <p class="text-sm"><a href="https://github.com/janjrukiyavivek/smart-tab-organizer/blob/main/RELEASE_NOTES.md" target="_blank" rel="noopener">Full changelog on GitHub →</a></p>
     </section>
   </main>
 </div>
