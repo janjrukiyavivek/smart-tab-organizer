@@ -12,15 +12,9 @@ Technical reference for maintainers/contributors. User-facing docs live in `READ
 
 ## Documentation site
 
-`docs/` is published via GitHub Pages (`main` branch, `/docs` path — confirmed via the repo's Pages API settings) at `https://smarttab.bytebox.network`.
+The site at `https://smarttab.bytebox.network` is no longer part of this repo — it's now served by a Cloudflare Worker in the `cloudflare-personal-site` repo. This repo previously hosted it via GitHub Pages from a `docs/` folder; that folder and GitHub Pages have both been removed here.
 
-- `docs/index.html` — the whole site (single page): features, screenshots, install steps, rule syntax, privacy summary, release notes.
-- `docs/CNAME` — custom domain for GitHub Pages.
-- `docs/.nojekyll` — disables Jekyll processing (the site is plain static HTML).
-- `docs/sitemap.xml` / `docs/robots.txt` — SEO basics; keep the sitemap's URL list and `index.html`'s canonical/OG tags in sync if pages are ever added.
-- `docs/.well-known/security.txt` — RFC 9116 vulnerability-disclosure contact for the site; mirrors `SECURITY.md` at the repo root, which covers GitHub's own "Report a vulnerability" UI.
-
-The "Rule syntax" and "Release notes" sections in `docs/index.html` are hand-maintained and don't auto-generate from `options.html`'s Help text or `RELEASE_NOTES.md` — update all three when the rule syntax or version changes.
+The "Rule syntax" and "Release notes" sections on the site are hand-maintained and don't auto-generate from `options.html`'s Help text or `RELEASE_NOTES.md` — update all three (in their respective repos) when the rule syntax or version changes.
 
 ## Rule syntax (source of truth)
 
